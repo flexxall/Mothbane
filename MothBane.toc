@@ -1,0 +1,11 @@
+## Interface: 120000,120001
+## Title: MothBane
+## Version: 0.0.4
+## Notes: Hides Glowing Moth treasures from the minimap in Harandar. Options: nothing, shadow, or moth icon.
+## Author: FlexxDev
+## SavedVariables: MothBaneDB
+## IconTexture: Interface\AddOns\MothBane\Art\mothbane
+## X-Category: Map & Minimap
+## X-Website: https://github.com/flexxall/MothBane
+MothBane.lua
+MothBane_UI.lua

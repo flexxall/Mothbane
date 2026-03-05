@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archives (don't commit release zips)
+*.zip
+*.7z
+
+# IDE / editor
+.cursor/
+.vscode/
+*.swp
+*~
+
+# Local overrides (if you ever add any)
+*.local

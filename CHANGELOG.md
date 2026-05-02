@@ -2,10 +2,16 @@
 
 All notable changes to MothBane are documented here.
 
+## [0.0.5] - 2026-05-02
+
+### Changed
+- README expanded for CurseForge/GitHub project overview (features, slash commands, compatibility).
+- TOC `Interface` includes **120005** for Retail **12.0.5**.
+
 ## [0.0.4] - 2025-03-04
 
 ### Added
-- Settings panel with Enable, minimap button visibility, replace style (Nothing / Shadow / Moth), and icon scale.
+- Settings panel with Enable, minimap button visibility, replace style (Shadow / Moth), and icon scale.
 - Minimap button: left-click opens options, right-click drag to move.
 - Slash commands: `/mothbane`, `/mothbane on|off`, `/mothbane debug` (dev build).
 - Optional debug UI with log output and Test now (when enabled in build).

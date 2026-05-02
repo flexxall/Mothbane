@@ -10,15 +10,19 @@ Use this when publishing or updating MothBane on CurseForge.
    - Go to [CurseForge WoW Addons](https://www.curseforge.com/wow/addons) → **Submit New Project**.
    - **Project name:** MothBane  
    - **Category:** Map & Minimap (or Interface Enhancements)  
-   - **Game version:** World of Warcraft (Retail). Add the latest version(s) you support (e.g. 11.0.x).
+   - **Game version:** World of Warcraft (Retail). Match what’s in `MothBane.toc` (e.g. **12.0.5** when `Interface` lists **120005**).
 
 2. **Short description** (for listing/search):
    ```
-   Hides Glowing Moth treasures from the minimap in Harandar. Choose nothing, a shadow, or a moth icon. No dependencies.
+   Customizes how Glowing Moth treasures appear on the minimap in Harandar. Replace the default treasure icon with a shadow or a moth icon so you can tell them apart from other treasures. No dependencies.
    ```
 
-3. **Full description**
-   - Paste the contents of README.md, or a shorter version that includes: what it does, slash commands, how to open the UI, and main settings.
+3. **Full description** (overview page)
+   - **WYSIWYG (recommended when Markdown fails):** Open **`CURSEFORGE_DESCRIPTION.html`** in your editor. Copy everything from `<h1>MothBane</h1>` through the final `<p>Source: …</p>` (skip nothing—omit only a BOM if your editor adds one). In the CurseForge description field, switch to **WYSIWYG** (not Markdown). Look for **Source**, **HTML**, or a **`</>`** button on the toolbar—paste the HTML there and save. If there is **no** HTML mode: open **`CURSEFORGE_DESCRIPTION.html`** in Chrome or Edge (**File → Open file**), press **Ctrl+A**, **Ctrl+C**, then paste into the empty WYSIWYG body—many editors inherit headings, lists, and links from the clipboard.
+   - **Markdown:** Still flaky vs GitHub; only use if you verify headings render after save.
+   - **BBCode:** Copy **`CURSEFORGE_DESCRIPTION.bbcode`** if the editor exposes a BBCode tab instead.
+   - **Hero image:** HTML/BBCode embed **`mothView.png`** directly under the title (`raw.githubusercontent.com/.../main/mothView.png`). Commit it on **`main`** or swap `src` / `[img]` for a URL from **Project → Images** after uploading.
+   - Keep functional sections before donate/external promo—extras belong **below** the main description (see Moderation Policies).
 
 4. **Optional: link GitHub**
    - In project **Settings** or **Links**, add your repository URL so the "Source" link appears.
@@ -34,31 +38,30 @@ Use this when publishing or updating MothBane on CurseForge.
 
 ## Packaging the zip
 
-The zip must contain the **contents** of the addon folder so that after extracting, users have:
+CurseForge requires WoW addons to be packaged **with a root folder**. When you open the zip, the first thing you see must be the `MothBane` folder; inside it are the addon files:
 
 ```
-MothBane/
+MothBane/           ← root folder (required)
   MothBane.toc
   MothBane.lua
   MothBane_UI.lua
   Art/
-    mothbane.blp   (or .tga – your icon texture)
-  README.md       (optional but nice)
-  CHANGELOG.md    (optional)
+    mothbane.blp
+  README.md
+  CHANGELOG.md
+  etc.
 ```
 
-**Do not** zip the parent folder so the zip root is `MothBane` (the folder name). So:
+- **Correct:** Zip the `MothBane` folder itself → open zip and you see one folder `MothBane`; open that to see the files.
+- **Wrong:** Zip only the contents (so the zip root is `MothBane.toc`, `MothBane.lua`, etc.). CurseForge will reject: "WoW addons must be packaged so that all files are inside a root folder."
 
-- **Correct:** Zip contents of `MothBane` → open zip and first thing you see is `MothBane.toc`, `MothBane.lua`, etc.
-- **Wrong:** Zip the `MothBane` folder itself → open zip and you see one folder `MothBane`; that can break some installs.
-
-**Windows (PowerShell)** from `Interface\AddOns\`:
+**Windows (PowerShell)** from the parent of your addon folder (e.g. `d:\AddOns\`):
 ```powershell
-Compress-Archive -Path MothBane\* -DestinationPath MothBane-0.0.4.zip
+Compress-Archive -Path MothBane -DestinationPath MothBane-0.0.5.zip
 ```
-Then rename or move so the zip is named e.g. `MothBane-0.0.4.zip`. CurseForge will accept it.
+Then rename so the zip is e.g. `MothBane-0.0.5.zip`. CurseForge will accept it.
 
-**Manual:** Select all files and folders inside `MothBane` (not the folder), right‑click → Send to → Compressed folder, then rename the zip.
+**Manual:** Right‑click the `MothBane` folder → Send to → Compressed (zipped) folder, then rename the zip (e.g. `MothBane-0.0.5.zip`).
 
 ---
 
@@ -67,7 +70,7 @@ Then rename or move so the zip is named e.g. `MothBane-0.0.4.zip`. CurseForge wi
 1. In your CurseForge project, go to **Files** → **Upload new file**.
 2. Choose the zip you built.
 3. **Game version:** Select the WoW Retail version(s) this release supports (e.g. 11.0.5).
-4. **Release type:** Alpha / Beta / Release (use Release for 0.0.4).
+4. **Release type:** Alpha / Beta / Release (use Release for stable drops).
 5. **Changelog:** Paste what changed (e.g. from CHANGELOG.md for this version).
 6. Submit. CurseForge will scan the TOC and list the addon.
 
@@ -96,7 +99,7 @@ Use your **personal** GitHub account (e.g. flexxall@live.com), not a shared/org 
    git config user.email "flexxall@live.com"
    git init
    git add .
-   git commit -m "Initial release 0.0.4"
+   git commit -m "Release 0.0.5"
    git branch -M main
    git remote add origin https://github.com/flexxall/MothBane.git
    git push -u origin main

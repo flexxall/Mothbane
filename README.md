@@ -1,43 +1,71 @@
 # MothBane
 
-Hides Glowing Moth treasures from the minimap in Harandar. Choose what appears over each moth: nothing, a shadow, or a moth icon. No dependencies. World of Warcraft Retail.
+![MothBane on the minimap](./mothView.png)
+
+In Harandar, Glowing Moth treasures share the same minimap sparkle as lots of other treasures. That makes it easy to waste time chasing the wrong dot—or miss what you actually wanted. **MothBane** keeps those moths readable by swapping Blizzard’s usual treasure ping for something you choose: a clear **shadow** overlay or a dedicated **moth** icon.
+
+Lightweight, **no dependencies**, World of Warcraft **Retail**.
 
 ---
 
-## Installation
+## Why use this?
 
-1. Download the latest release (zip) from [CurseForge](https://www.curseforge.com/wow/addons/mothbane) or clone this repo.
-2. Extract so the `MothBane` folder (containing `MothBane.toc`, `MothBane.lua`, etc.) is inside `World of Warcraft\_retail_\Interface\AddOns\`.
-3. Restart WoW or run `/reload`.
+- Spot moth treasures **without** confusing them with unrelated treasures on the minimap.
+- Pick the visual that fits how you navigate the zone—shadow or moth icon.
+- Toggle everything off anytime with **Enable MothBane** or **`/mothbane off`** if you want vanilla behaviour back.
+
+---
+
+## Features
+
+- **Two minimap styles** – Replace the default treasure vignette with a **shadow** tint or your **moth** artwork so moths stand out from other treasure pins.
+- **Adjustable icon scale** – Small / Medium / Large so the overlay matches your minimap setup.
+- **Minimap launcher** – Optional button on the minimap (hide it and use **`/mothbane`** only if you prefer a clean rim).
+- **In-game settings** – Enable/disable, style, scale, and minimap button visibility from one panel.
 
 ---
 
 ## Slash commands
 
-| Command | Description |
-|--------|-------------|
-| **/mothbane** | Open or close the settings window. Use this when the minimap button is hidden. |
-| **/mothbane on** or **/mothbane 1** | Enable MothBane. |
-| **/mothbane off** or **/mothbane 0** | Disable MothBane. |
-| **/mothbane debug** | Toggle debug logging. Only available in the developer build. |
+```
+/mothbane              Open or close the settings window (handy when the minimap button is hidden).
+/mothbane on           Enable MothBane (same as /mothbane 1).
+/mothbane off          Disable MothBane (same as /mothbane 0).
+```
 
 ---
 
 ## Opening the UI
 
-- **Minimap:** Left-click the moth icon to open options. Right-click and drag to move the icon. You can hide the button in settings and use **/mothbane** instead.
-- **Slash:** Type **/mothbane** to open or close the settings window (works when the minimap button is hidden).
+- **Minimap:** Left-click the moth icon for options. **Right-click and drag** to move the icon.
+- **Slash:** Type **`/mothbane`** to toggle the settings window.
 
 ---
 
 ## Settings
 
-- **Enable MothBane** – Master on/off.
-- **Show minimap button** – Show or hide the moth icon on the minimap.
-- **Replace Blizzard treasure with:** Nothing / Shadow / Moth – What to show at each moth on the minimap. Default is Moth.
+- **Enable MothBane** – Master on/off for all minimap behaviour.
+- **Show minimap button** – Shows or hides the moth launcher on the minimap rim.
+- **Replace Blizzard treasure with** – **Shadow** or **Moth** over each Glowing Moth on the minimap; default is **Moth**.
+- **Icon scale** – **Small**, **Medium**, or **Large** overlay size.
 
 ---
 
-## Publishing
+## Installation
 
-See [CURSEFORGE.md](CURSEFORGE.md) for CurseForge upload steps, packaging the zip, and Git setup.
+1. Download the latest zip from [CurseForge](https://www.curseforge.com/wow/addons/mothbane) or clone this repo.
+2. Extract so the **`MothBane`** folder (with `MothBane.toc`, `MothBane.lua`, etc.) sits inside  
+   `World of Warcraft\_retail_\Interface\AddOns\`.
+3. Restart WoW or run **`/reload`**.
+
+---
+
+## Bugs & suggestions
+
+Use **CurseForge comments** or **[GitHub Issues](https://github.com/flexxall/MothBane/issues)**—either works.
+
+---
+
+## Publishing & source
+
+Release packaging and Git workflow: [CURSEFORGE.md](CURSEFORGE.md). **CurseForge overview:** use [CURSEFORGE_DESCRIPTION.html](CURSEFORGE_DESCRIPTION.html) for WYSIWYG (HTML/source paste) or [CURSEFORGE_DESCRIPTION.bbcode](CURSEFORGE_DESCRIPTION.bbcode) for BBCode—Markdown from this README often breaks on the site. Source: [github.com/flexxall/MothBane](https://github.com/flexxall/MothBane).

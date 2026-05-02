@@ -304,7 +304,6 @@ local function CreateSettingsFrame()
 
     local shadowColor = { 0.22, 0.24, 0.18, 0.96 }
     local styleOptions = {
-        { value = "none", label = "Nothing" },
         { value = "dark", label = "Shadow", color = shadowColor },
         { value = "icon", label = "Moth", icon = MothBane_MOTH_IMAGE_PATH or "" },
     }

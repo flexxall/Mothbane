@@ -13,9 +13,9 @@ if MothBaneDB.enabled == nil then MothBaneDB.enabled = true end
 if MothBaneDB.debug == nil then MothBaneDB.debug = false end
 if not MothBaneDB.width then MothBaneDB.width = 380 end
 if not MothBaneDB.height then MothBaneDB.height = (ENABLE_DEBUG_UI and 300 or 240) end
--- coverStyle: none | dark | icon
+-- coverStyle: dark | icon (shadow or moth)
 if MothBaneDB.coverStyle == nil then MothBaneDB.coverStyle = "icon" end
-if MothBaneDB.coverStyle == "image" then MothBaneDB.coverStyle = "icon" end
+if MothBaneDB.coverStyle == "none" or MothBaneDB.coverStyle == "image" then MothBaneDB.coverStyle = "icon" end
 if MothBaneDB.showMinimapButton == nil then MothBaneDB.showMinimapButton = true end
 if MothBaneDB.minimapAngle == nil then MothBaneDB.minimapAngle = 90 end
 if MothBaneDB.coverScale == nil then MothBaneDB.coverScale = 1 end

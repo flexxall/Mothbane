@@ -9,7 +9,6 @@ All notable changes to MothBane are documented here.
 
 ### Changed
 - README expanded for CurseForge/GitHub project overview (features, slash commands).
-- CurseForge description source: **`CURSEFORGE_DESCRIPTION.html`** (paste via WYSIWYG HTML/source on dashboard).
 
 ## [0.0.4] - 2025-03-04
 

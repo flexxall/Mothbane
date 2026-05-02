@@ -4,9 +4,12 @@ All notable changes to MothBane are documented here.
 
 ## [0.0.5] - 2026-05-02
 
+### Compatibility
+- **WoW Retail 12.0.5** — TOC updated so the addon loads on that patch (Blizzard **Interface** ID **120005**).
+
 ### Changed
-- README expanded for CurseForge/GitHub project overview (features, slash commands, compatibility).
-- TOC `Interface` includes **120005** for Retail **12.0.5**.
+- README expanded for CurseForge/GitHub project overview (features, slash commands).
+- CurseForge description source: **`CURSEFORGE_DESCRIPTION.html`** (paste via WYSIWYG HTML/source on dashboard).
 
 ## [0.0.4] - 2025-03-04
 

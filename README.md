@@ -63,9 +63,3 @@ Lightweight, **no dependencies**, World of Warcraft **Retail**.
 ## Bugs & suggestions
 
 Use **CurseForge comments** or **[GitHub Issues](https://github.com/flexxall/MothBane/issues)**—either works.
-
----
-
-## Publishing & source
-
-Release packaging and Git workflow: [CURSEFORGE.md](CURSEFORGE.md). **CurseForge overview:** use [CURSEFORGE_DESCRIPTION.html](CURSEFORGE_DESCRIPTION.html) for WYSIWYG (HTML/source paste) or [CURSEFORGE_DESCRIPTION.bbcode](CURSEFORGE_DESCRIPTION.bbcode) for BBCode—Markdown from this README often breaks on the site. Source: [github.com/flexxall/MothBane](https://github.com/flexxall/MothBane).

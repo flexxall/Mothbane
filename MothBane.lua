@@ -1,4 +1,4 @@
--- MothBane: hide Glowing Moth on minimap. /mothbane, minimap button.
+-- MothBane: custom Glowing Moth minimap cues (shadow or moth). /mothbane, minimap button.
 -- Set false for release build.
 local ENABLE_DEBUG_UI = false
 
@@ -80,7 +80,7 @@ C_VignetteInfo.GetVignetteInfo = function(id)
     return info
 end
 
--- Draw over moth vignettes on minimap to hide them.
+-- Draw overlays on moth vignette world positions on the minimap.
 local coverPool = {}
 local coverFrames = {}
 

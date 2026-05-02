@@ -15,3 +15,6 @@ desktop.ini
 
 # Local overrides (if you ever add any)
 *.local
+
+# Author-only publishing notes (optional local checklist)
+CURSEFORGE.md

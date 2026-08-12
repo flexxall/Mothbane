@@ -196,21 +196,33 @@ local function UpdateSpotCovers()
         local info = C_VignetteInfo.GetVignetteInfo(guid)
         if info and isMothName(info.name) then
             seen[guid] = true
-            local pos = C_VignetteInfo.GetVignettePosition(guid, uiMapID)
-            if pos then
+            local okPos, pos = pcall(C_VignetteInfo.GetVignettePosition, guid, uiMapID)
+            if okPos and pos then
                 local vx, vy
-                if pos.GetXY then vx, vy = pos:GetXY() else vx, vy = pos.x, pos.y end
-                if vx and vy then
-                    local f = coverPool[guid] or GetOrCreateCover()
-                    if f then
-                        coverPool[guid] = f
-                        f.guid = guid
-                        f.vx = vx
-                        f.vy = vy
-                        f.px = nil
-                        f.py = nil
-                        ApplyCoverAppearance(f.tex)
-                        f:Show()
+                local okXY = pcall(function()
+                    if pos.GetXY then
+                        vx, vy = pos:GetXY()
+                    else
+                        vx, vy = pos.x, pos.y
+                    end
+                end)
+                
+                if okXY and vx and vy then
+                    -- Only assign plain numbers to prevent secret number taint
+                    vx = tonumber(vx)
+                    vy = tonumber(vy)
+                    if vx and vy then
+                        local f = coverPool[guid] or GetOrCreateCover()
+                        if f then
+                            coverPool[guid] = f
+                            f.guid = guid
+                            f.vx = vx
+                            f.vy = vy
+                            f.px = nil
+                            f.py = nil
+                            ApplyCoverAppearance(f.tex)
+                            f:Show()
+                        end
                     end
                 end
             end

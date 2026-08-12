@@ -20,9 +20,6 @@ if MothBaneDB.showMinimapButton == nil then MothBaneDB.showMinimapButton = true 
 if MothBaneDB.minimapAngle == nil then MothBaneDB.minimapAngle = 90 end
 if MothBaneDB.coverScale == nil then MothBaneDB.coverScale = 1 end
 
-local origGetVignettes = C_VignetteInfo.GetVignettes
-local origGetInfo = C_VignetteInfo.GetVignetteInfo
-
 local function isMothName(name)
     return name and (name == TARGET or strmatch(name, "Glowing Moth"))
 end
@@ -37,47 +34,6 @@ local function LogToWindow(msg)
         MothBane_OutputEdit:SetText(table.concat(logLines, "\n"))
         MothBane_OutputEdit:SetCursorPosition(string.len(MothBane_OutputEdit:GetText()))
     end
-end
-
-local lastGetVignettesPrint = 0
-local getVignettesPrintGap = 2
-
-C_VignetteInfo.GetVignettes = function()
-    local list = origGetVignettes()
-    if not MothBaneDB.enabled then return list end
-    if not list or #list == 0 then return list end
-    local out = {}
-    local filtered = 0
-    for i = 1, #list do
-        local id = list[i]
-        local info = origGetInfo(id)
-        if not info or not info.name or not isMothName(info.name) then
-            tinsert(out, id)
-        else
-            filtered = filtered + 1
-        end
-    end
-    if MothBaneDB.debug and filtered > 0 then
-        local t = GetTime()
-        if t - lastGetVignettesPrint >= getVignettesPrintGap then
-            lastGetVignettesPrint = t
-            LogToWindow("GetVignettes: filtered " .. filtered .. " Glowing Moth(s)")
-        end
-    end
-    return out
-end
-
-C_VignetteInfo.GetVignetteInfo = function(id)
-    local info = origGetInfo(id)
-    if not MothBaneDB.enabled then return info end
-    if info and isMothName(info.name) then
-        if MothBaneDB.debug then
-            LogToWindow("GetVignetteInfo: Glowing Moth (onMinimap=false)")
-        end
-        info.onMinimap = false
-        info.atlasName = nil
-    end
-    return info
 end
 
 -- Draw overlays on moth vignette world positions on the minimap.
@@ -113,7 +69,9 @@ local function GetOrCreateCover()
     f:SetSize(16, 16)
     f:SetFrameStrata(minimap:GetFrameStrata())
     f:SetFrameLevel(minimap:GetFrameLevel() + 12)
-    f:EnableMouse(false)
+    -- Changing this to 'true' blocks the mouse from hitting the default moth pin below it, 
+    -- preventing the default tooltip from showing if you wish to hide it completely.
+    f:EnableMouse(false) 
     local tex = f:CreateTexture(nil, "ARTWORK")
     tex:SetAllPoints()
     ApplyCoverAppearance(tex)
@@ -122,6 +80,7 @@ local function GetOrCreateCover()
     tinsert(coverFrames, f)
     return f
 end
+
 local function ReleaseCover(frame)
     if not frame then return end
     frame.inUse = nil
@@ -224,7 +183,8 @@ local function UpdateSpotCovers()
         end
         return
     end
-    local raw = origGetVignettes()
+    -- Use the default secure C_API calls natively.
+    local raw = C_VignetteInfo.GetVignettes()
     local uiMapID = C_Map and C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
     if not raw or not uiMapID then
         for guid, f in pairs(coverPool) do ReleaseCover(f); coverPool[guid] = nil end
@@ -233,7 +193,7 @@ local function UpdateSpotCovers()
     local seen = {}
     for i = 1, #raw do
         local guid = raw[i]
-        local info = origGetInfo(guid)
+        local info = C_VignetteInfo.GetVignetteInfo(guid)
         if info and isMothName(info.name) then
             seen[guid] = true
             local pos = C_VignetteInfo.GetVignettePosition(guid, uiMapID)
@@ -325,22 +285,20 @@ MothBane_LogToWindow = LogToWindow
 MothBane_MOTH_IMAGE_PATH = MOTH_IMAGE_PATH
 
 function MothBane_RunTest()
-    local raw = origGetVignettes()
+    local raw = C_VignetteInfo.GetVignettes()
     local total = raw and #raw or 0
     local moths = 0
     if raw then
         for i = 1, #raw do
-            local info = origGetInfo(raw[i])
+            local info = C_VignetteInfo.GetVignetteInfo(raw[i])
             if info and isMothName(info.name) then moths = moths + 1 end
         end
     end
-    local filtered = C_VignetteInfo.GetVignettes()
-    local shown = filtered and #filtered or 0
+    
     LogToWindow("--- Test ---")
-    LogToWindow("Raw vignettes: " .. total .. "  |  Moths in list: " .. moths .. "  |  After filter: " .. shown)
+    LogToWindow("Raw vignettes: " .. total .. "  |  Moths in list: " .. moths)
     if moths > 0 and total > 0 then
-        LogToWindow("Hooks work (we filter " .. moths .. " moth(s)).")
-        LogToWindow("If the moth still shows on the minimap, the game is NOT using these APIs to draw it.")
+        LogToWindow("Tracking works. Cover pool should now obscure the moth native pin.")
     else
         LogToWindow("No Glowing Moth in vignette list right now (or not in range).")
     end

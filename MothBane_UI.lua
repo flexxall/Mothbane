@@ -1,25 +1,14 @@
 -- Settings frame and minimap button.
-if not MothBane_CoverShouldBeActive then return end
 
 local function GetVersion()
     if C_AddOns and C_AddOns.GetAddOnMetadata then
         local v = C_AddOns.GetAddOnMetadata("MothBane", "Version")
         if v and v ~= "" then return v end
     end
-    if GetAddOnMetadata then
-        local v = GetAddOnMetadata("MothBane", "Version")
-        if v and v ~= "" then return v end
-        for i = 1, (GetNumAddOns and GetNumAddOns() or 0) do
-            if GetAddOnInfo(i) == "MothBane" then
-                v = GetAddOnMetadata(i, "Version")
-                if v and v ~= "" then return v end
-                break
-            end
-        end
-    end
     return nil
 end
-local ENABLE_DEBUG_UI = MothBane_EnableDebugUI
+
+local ENABLE_DEBUG_UI = MothBane_EnableDebugUI or false
 
 local MIN_W, MIN_H = 380, (ENABLE_DEBUG_UI and 380 or 220)
 local MAX_W, MAX_H = 560, 520
@@ -273,10 +262,16 @@ local function CreateSettingsFrame()
     enabled.Text:SetText("Enable MothBane")
     enabled.Text:SetWordWrap(false)
     enabled.Text:SetTextColor(0.92, 0.9, 0.85)
-    enabled:SetChecked(MothBaneDB.enabled)
+    enabled:SetChecked(MothBaneDB and MothBaneDB.enabled)
     enabled:SetScript("OnClick", function(self)
+        if not MothBaneDB then return end
         MothBaneDB.enabled = self:GetChecked()
-        if MothBane_CoverShouldBeActive() then MothBane_UpdateSpotCovers(); MothBane_StartCoverUpdates() else MothBane_StopCoverTicker() end
+        if MothBane_CoverShouldBeActive and MothBane_CoverShouldBeActive() then 
+            if MothBane_UpdateSpotCovers then MothBane_UpdateSpotCovers() end
+            if MothBane_StartCoverUpdates then MothBane_StartCoverUpdates() end
+        else 
+            if MothBane_StopCoverTicker then MothBane_StopCoverTicker() end
+        end
     end)
     off = off + 28
 
@@ -285,8 +280,9 @@ local function CreateSettingsFrame()
     showMinimapBtn.Text:SetText("Show minimap button")
     showMinimapBtn.Text:SetWordWrap(false)
     showMinimapBtn.Text:SetTextColor(0.92, 0.9, 0.85)
-    showMinimapBtn:SetChecked(MothBaneDB.showMinimapButton ~= false)
+    showMinimapBtn:SetChecked(MothBaneDB and MothBaneDB.showMinimapButton ~= false)
     showMinimapBtn:SetScript("OnClick", function(self)
+        if not MothBaneDB then return end
         MothBaneDB.showMinimapButton = self:GetChecked()
         if MothBane_MinimapButton then
             if MothBaneDB.showMinimapButton then MothBane_MinimapButton:Show() else MothBane_MinimapButton:Hide() end
@@ -308,16 +304,22 @@ local function CreateSettingsFrame()
         { value = "icon", label = "Moth", icon = MothBane_MOTH_IMAGE_PATH or "" },
     }
     local function setStyle(value)
+        if not MothBaneDB then return end
         MothBaneDB.coverStyle = value
         if MothBane_CoverFrames then
             for i = 1, #MothBane_CoverFrames do
                 if MothBane_CoverFrames[i].tex and MothBane_ApplyCoverAppearance then MothBane_ApplyCoverAppearance(MothBane_CoverFrames[i].tex) end
             end
         end
-        if MothBane_CoverShouldBeActive() then MothBane_UpdateSpotCovers(); MothBane_StartCoverUpdates() else MothBane_StopCoverTicker() end
+        if MothBane_CoverShouldBeActive and MothBane_CoverShouldBeActive() then 
+            if MothBane_UpdateSpotCovers then MothBane_UpdateSpotCovers() end
+            if MothBane_StartCoverUpdates then MothBane_StartCoverUpdates() end
+        else 
+            if MothBane_StopCoverTicker then MothBane_StopCoverTicker() end
+        end
     end
     local styleSelector = CustomDropdown(f, 140, styleOptions,
-        function() return MothBaneDB.coverStyle or "icon" end,
+        function() return MothBaneDB and MothBaneDB.coverStyle or "icon" end,
         setStyle)
     styleSelector:SetPoint("LEFT", styleLabel, "RIGHT", 10, 0)
     off = off + 36
@@ -333,11 +335,15 @@ local function CreateSettingsFrame()
         { value = 1.25, label = "Large" },
     }
     local function setScale(value)
+        if not MothBaneDB then return end
         MothBaneDB.coverScale = value
-        if MothBane_CoverShouldBeActive() then MothBane_UpdateSpotCovers(); MothBane_StartCoverUpdates() end
+        if MothBane_CoverShouldBeActive and MothBane_CoverShouldBeActive() then 
+            if MothBane_UpdateSpotCovers then MothBane_UpdateSpotCovers() end
+            if MothBane_StartCoverUpdates then MothBane_StartCoverUpdates() end
+        end
     end
     local scaleSelector = CustomDropdown(f, 110, scaleOptions,
-        function() return MothBaneDB.coverScale or 1 end,
+        function() return MothBaneDB and MothBaneDB.coverScale or 1 end,
         setScale)
     scaleSelector:SetPoint("TOPLEFT", rightColAnchor, "TOPLEFT", indent, -offRight)
 
@@ -350,8 +356,8 @@ local function CreateSettingsFrame()
         debug.Text:SetText("Log Glowing Moth hook activity to output")
         debug.Text:SetWordWrap(false)
         debug.Text:SetTextColor(0.92, 0.9, 0.85)
-        debug:SetChecked(MothBaneDB.debug)
-        debug:SetScript("OnClick", function(self) MothBaneDB.debug = self:GetChecked() end)
+        debug:SetChecked(MothBaneDB and MothBaneDB.debug)
+        debug:SetScript("OnClick", function(self) if MothBaneDB then MothBaneDB.debug = self:GetChecked() end end)
         off = off + 28
 
         local outputLabel = f:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -413,9 +419,11 @@ local function CreateSettingsFrame()
 
     f:SetScript("OnShow", function()
         if setHeaderVersion then setHeaderVersion() end
-        enabled:SetChecked(MothBaneDB.enabled)
-        showMinimapBtn:SetChecked(MothBaneDB.showMinimapButton ~= false)
-        if debug then debug:SetChecked(MothBaneDB.debug) end
+        if MothBaneDB then
+            enabled:SetChecked(MothBaneDB.enabled)
+            showMinimapBtn:SetChecked(MothBaneDB.showMinimapButton ~= false)
+            if debug then debug:SetChecked(MothBaneDB.debug) end
+        end
         if styleSelector then styleSelector:Refresh() end
         if scaleSelector then scaleSelector:Refresh() end
         if edit and MothBane_GetLogLines then
@@ -430,7 +438,7 @@ end
 local function UpdateMinimapButtonPosition(btn)
     local minimap = _G.Minimap
     if not minimap or not btn then return end
-    local angle = (MothBaneDB.minimapAngle or 90) * (math.pi / 180)
+    local angle = ((MothBaneDB and MothBaneDB.minimapAngle) or 90) * (math.pi / 180)
     local r = (minimap:GetWidth() or 150) * 0.5 + 8
     local x = math.cos(angle) * r
     local y = math.sin(angle) * r
@@ -465,7 +473,7 @@ local function CreateMinimapButton()
     end)
     btn:SetScript("OnMouseUp", function(_, mb)
         local x, y = GetCursorPosition()
-        local distSq = (x - btn.downX)^2 + (y - btn.downY)^2
+        local distSq = (x - (btn.downX or 0))^2 + (y - (btn.downY or 0))^2
         if mb == "LeftButton" then
             if btn.leftDown and distSq < 49 and MothBane_ShowSettings then
                 MothBane_ShowSettings()
@@ -482,17 +490,18 @@ local function CreateMinimapButton()
         if not minimap then return end
         local mx, my = minimap:GetCenter()
         local scale = minimap:GetEffectiveScale()
-        local cx = GetCursorPosition() / scale
-        local cy = select(2, GetCursorPosition()) / scale
+        local rawX, rawY = GetCursorPosition()
+        local cx, cy = rawX / scale, rawY / scale
         local dx, dy = cx - mx, cy - my
         local angle = math.atan2(dy, dx) * (180 / math.pi)
-        MothBaneDB.minimapAngle = angle
+        if MothBaneDB then MothBaneDB.minimapAngle = angle end
         UpdateMinimapButtonPosition(self)
     end)
     btn:SetScript("OnEnter", function(self)
         if self.dragging then return end
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-        do local v = GetVersion(); GameTooltip:SetText(v and ("MothBane v" .. v) or "MothBane") end
+        local v = GetVersion()
+        GameTooltip:SetText(v and ("MothBane v" .. v) or "MothBane", 1, 0.92, 0.55)
         GameTooltip:AddLine("Left-click: Options", 0.2, 0.8, 0.2)
         GameTooltip:AddLine("Right-click drag: Move", 0.2, 0.8, 0.2)
         GameTooltip:Show()
@@ -500,7 +509,7 @@ local function CreateMinimapButton()
     btn:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
-    if MothBaneDB.showMinimapButton ~= false then btn:Show() else btn:Hide() end
+    if MothBaneDB and MothBaneDB.showMinimapButton ~= false then btn:Show() else btn:Hide() end
 end
 
 function MothBane_ShowSettings()

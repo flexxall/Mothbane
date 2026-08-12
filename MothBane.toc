@@ -1,6 +1,6 @@
-## Interface: 120000,120001,120005
+## Interface: 120000,120001,120005,120007,120100
 ## Title: MothBane
-## Version: 0.0.5
+## Version: 0.0.7
 ## Notes: Customizes Glowing Moth treasures on the minimap in Harandar. Options: shadow or moth icon.
 ## Author: FlexxDev
 ## SavedVariables: MothBaneDB

@@ -2,6 +2,21 @@
 
 All notable changes to MothBane are documented here.
 
+## [0.0.7] - 2026-08-11
+
+### Fixed
+- **Action Bar Taint Crash** — Removed global `C_VignetteInfo` API hooks that were corrupting `GameTooltip` state and triggering secret number comparison errors on action buttons (`Blizzard_SharedXML/LayoutFrame.lua`).
+- **Settings Frame Initialization** — Removed an early return guard in `Settings.lua` that prevented the settings window and minimap button from initializing when loaded out of order.
+- **Tooltip & API Deprecations** — Modernized `GetAddOnMetadata` calls to `C_AddOns.GetAddOnMetadata` and corrected `GameTooltip` anchoring parameters.
+
+### Performance
+- **Minimap Button Dragging** — Optimized cursor position tracking in `OnUpdate` to reduce global API calls during button movement.
+
+## [0.0.6] - 2026-06-19
+
+### Compatibility
+- **WoW Retail 12.0.7** — TOC updated so the addon loads on the latest Midnight patch (Blizzard **Interface** ID **120007**).
+
 ## [0.0.5] - 2026-05-02
 
 ### Compatibility
